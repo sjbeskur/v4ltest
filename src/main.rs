@@ -118,7 +118,7 @@ fn convert_rgbvis_buffer(buffer: &[u8]) -> Vec<u8>{
 }
 
 
-
+/* 
 fn convert_grayscale_vis_buffer(buffer: &[u8]) -> Vec<u8>{
 	todo!("this doesn't really work yet");
 	let gray: Vec<u8>  = buffer
@@ -129,3 +129,4 @@ fn convert_grayscale_vis_buffer(buffer: &[u8]) -> Vec<u8>{
 		.flatten()
 		.collect();
 }
+*/

@@ -9,6 +9,7 @@ edition = "2021"
 ffimage = "0.10.0"
 ffimage_yuv = "0.10.0"
 image = "0.24.8"
+opencv = { version = "0.88.8", features = ["clang-runtime"] }
 #libspinnaker-sys = "0.1.0"
 v4l = "0.14.0"
 yuv = "0.1.5"
