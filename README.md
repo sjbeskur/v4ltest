@@ -1,3 +1,8 @@
+
+OpenCV v4.9.0
+
+opencv = { version = "0.88.8", features = ["clang-runtime"] }
+
 ```
 
 cmake -B build -S. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local \
