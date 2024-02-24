@@ -16,6 +16,13 @@ use ffimage::iter::{BytesExt, ColorConvertExt, PixelsExt};
 type AppResult = Result<(),Box<dyn std::error::Error>>;
 
 fn main() -> AppResult {
+    let camera = v4ltest::camera::OCVCamera::new();
+    camera.capture(2);
+    Ok(())
+}
+
+/* 
+fn main() -> AppResult {
 
     let devices = context::enum_devices();
     for dev in devices {
@@ -92,6 +99,7 @@ fn convert_ir_buffer(buffer: &[u8]) -> Vec<u8>{
 	rgb
 }
 
+*/
 
 //ELP-USB100W05MT-BL36
 // 3.6mm Lens
