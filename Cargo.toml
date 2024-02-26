@@ -2,6 +2,7 @@
 name = "v4ltest"
 version = "0.1.0"
 edition = "2021"
+authors = ["Sam Beskur <sam.beskur@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -13,3 +14,8 @@ opencv = { version = "0.88.8", features = ["clang-runtime"] }
 #libspinnaker-sys = "0.1.0"
 v4l = "0.14.0"
 yuv = "0.1.5"
+
+[dev-dependencies]
+
+[[example]]
+name = "camera_util"
