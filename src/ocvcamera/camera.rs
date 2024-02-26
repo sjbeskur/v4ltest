@@ -81,6 +81,8 @@ impl ImageSensor for OCVCamera {
 		let mut img = cv::prelude::Mat::default();
 		let _ = device.read(&mut img).unwrap();
 
+		//let vec2d: Vec<Vec<u8>> = img.to_vec_2d()?;
 		Ok(img.data_bytes()?.to_vec())
+		//Ok(vec2d)
 	}
 }

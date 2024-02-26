@@ -4,7 +4,7 @@ mod ocvcamera;
 mod traits;
 mod v4lcamera;
 
-pub(crate) use traits::*;
+pub use traits::*;
 
 pub use ocvcamera::*;
 

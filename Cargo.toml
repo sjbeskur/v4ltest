@@ -19,3 +19,6 @@ yuv = "0.1.5"
 
 [[example]]
 name = "camera_util"
+
+[[example]]
+name = "capture_image"
