@@ -21,7 +21,7 @@ impl OCVCamera {
 	}
 	pub fn capture_video(&self) {
 		//-> Result<Vec<u8>, Box<dyn std::error::Error>> {
-		let mut device = VideoCapture::new(self.index, cv::videoio::CAP_V4L2).unwrap();
+		let mut device = VideoCapture::new(self.index, cv::videoio::CAP_ANY).unwrap();
 		//let mut device  = VideoCapture::new_def(index).unwrap();
 
 		let mut akaze = AKAZE::create_def().unwrap();
@@ -31,13 +31,24 @@ impl OCVCamera {
 		let mut desc = Mat::default();
 
 		let mask = Mat::default();
-		let red_color = Scalar::new(0.0, 0.0, 255.0, 0.0);
+		let red_color = Scalar::new(0.0, 255.0, 0.0, 0.0);
 
 		let mut img = cv::prelude::Mat::default();
 
 		//let fourcc = cv::videoio::VideoWriter::fourcc('X', 'V', 'I', 'D').unwrap();
-		// let fourcc = cv::videoio::VideoWriter::fourcc('m', 'p' , '4' , 'v').unwrap();
-		// let mut writer = cv::videoio::VideoWriter::new("detects.mp4", fourcc, 20.0, cv::core::Size2i::new(640,512),false).unwrap();
+		//let fourcc = cv::videoio::VideoWriter::fourcc('m', 'p', '4', 'v').unwrap();
+		let fourcc = cv::videoio::VideoWriter::fourcc('H', '2', '6', '4').unwrap();
+
+		let fps = cv::videoio::CAP_PROP_FPS;
+		let fps = device.get(fps).unwrap();
+		let mut writer = cv::videoio::VideoWriter::new(
+			"detects.mp4",
+			fourcc,
+			fps,
+			cv::core::Size2i::new(640, 512),
+			false,
+		)
+		.unwrap();
 		// let frame_width =  device.get(3).unwrap();
 		// let frame_height = device.get(4).unwrap();
 		// println!("width {}, height {}", frame_width, frame_height);
@@ -61,6 +72,7 @@ impl OCVCamera {
 			//println!("{:?}",img.size());
 
 			cv::highgui::imshow("Display Window", &out_img).unwrap();
+			writer.write(&out_img).unwrap();
 
 			let k = opencv::highgui::wait_key(1).unwrap();
 			if k == 32 {
@@ -86,3 +98,46 @@ impl ImageSensor for OCVCamera {
 		//Ok(vec2d)
 	}
 }
+
+/*
+pub fn capture() {
+	let mut device = VideoCapture::new(2, cv::videoio::CAP_ANY).unwrap();
+	let mask = Mat::default();
+
+	let mut img = cv::prelude::Mat::default();
+
+	//let fourcc = cv::videoio::VideoWriter::fourcc('X', 'V', 'I', 'D').unwrap();
+	let fourcc = cv::videoio::VideoWriter::fourcc('m', 'p', '4', 'v').unwrap();
+
+	let fps = cv::videoio::CAP_PROP_FPS;
+	let fps = device.get(fps).unwrap();
+
+	let frame_width = device.get(3).unwrap();
+	let frame_height = device.get(4).unwrap();
+	println!("width {}, height {}", frame_width, frame_height);
+
+	let mut writer = cv::videoio::VideoWriter::new(
+		"detects.mp4",
+		fourcc,
+		fps,
+		cv::core::Size2i::new(frame_width, frame_height),
+		false,
+	)
+	.unwrap();
+
+	loop {
+		let _ = device.read(&mut img).unwrap();
+
+		cv::highgui::imshow("Display Window", &out_img).unwrap();
+
+		writer.write(&out_img).unwrap();
+
+		let k = opencv::highgui::wait_key(1).unwrap();
+		if k == 32 {
+			break;
+		}
+	}
+	// writer.release().unwrap();
+	device.release().unwrap();
+}
+*/
