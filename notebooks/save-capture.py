@@ -13,7 +13,7 @@ fps = int(cap.get(cv2.CAP_PROP_FPS))
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Codec for saving video (XVID is a common choice)
-output_path = 'output_video.avi'
+output_path = 'output_video2.avi'
 out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
 # Read and display frames from the video
