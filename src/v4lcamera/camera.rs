@@ -30,35 +30,40 @@ impl ImageSensor for V4l2Camera {
 	/// There is a lot of cruff in this implementation but I'm     
 	/// just trying to understand how to use the v4l2 rust lib.  Mostly
 	/// not comfortable with by how to decompress the frames etc
-	fn capture(&mut self) -> crate::AppResult<Vec<u8>> {
+	fn capture(&mut self) -> crate::AppResult<crate::CameraImage> {
 		//let mut dev = Device::new(self.dev_id).expect("Failed to open device");
 		let mut stream = MmapStream::with_buffers(&mut self.device, Type::VideoCapture, 4)
 			.expect("Failed to create buffer stream");
 		let (buf, _meta) = stream.next()?;
 		let rgb = convert_ir_buffer(&buf);
 		dbg!("len of converted: {}", rgb.len());
-		Ok(rgb)
+
+		let fmt = self.device.format()?;
+
+		let camera_image = crate::CameraImage::new(fmt.width as usize, fmt.height as usize, rgb);
+
+		Ok(camera_image)
 	}
 }
 
 #[test]
 fn test_v4lcapture() {
 	let mut sensor = V4l2Camera::new(2);
-	let img_buffer = sensor.capture().unwrap();
+	let camera_image = sensor.capture().unwrap();
 
 	let format = sensor.device.format().unwrap();
 
 	// https://github.com/raymanfx/libv4l-rs/issues/74
 	// ImageBuffer<Rgb<u8>, &[u8]>
 	let img: ImageBuffer<image::Rgb<u8>, Vec<u8>> =
-		ImageBuffer::from_raw(format.width, format.height, img_buffer)
+		ImageBuffer::from_raw(format.width, format.height, camera_image.data)
 			.expect("Failed to create image buffer from raw buf");
-
 
 	// let img = image::load_from_memory_with_format(&out, image::ImageFormat::Jpeg)?.to_rgb8();
 	img.save(format!("test_img.png"));
 
-    println!("Buffer size: {}",
+	println!(
+		"Buffer size: {}",
 		//, timestamp: {}",
 		img.len(),
 		//meta.sequence,

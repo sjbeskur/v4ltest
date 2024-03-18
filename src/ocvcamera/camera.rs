@@ -88,14 +88,21 @@ impl OCVCamera {
 }
 
 impl ImageSensor for OCVCamera {
-	fn capture(&mut self) -> crate::AppResult<Vec<u8>> {
+	fn capture(&mut self) -> crate::AppResult<crate::CameraImage> {
 		let mut device = VideoCapture::new(self.index, cv::videoio::CAP_V4L2).unwrap();
 		let mut img = cv::prelude::Mat::default();
 		let _ = device.read(&mut img).unwrap();
 
+		let width = device.get(3).unwrap();
+		let height = device.get(4).unwrap();
+
+		let data = img.data_bytes()?.to_vec();
+		let image = crate::CameraImage::new(width as usize, height as usize, data);
 		//let vec2d: Vec<Vec<u8>> = img.to_vec_2d()?;
-		Ok(img.data_bytes()?.to_vec())
-		//Ok(vec2d)
+
+		//Ok(img.data_bytes()?.to_vec())
+
+		Ok(image)
 	}
 }
 
